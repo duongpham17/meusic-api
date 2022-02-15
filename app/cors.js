@@ -2,7 +2,7 @@ const cors = require('cors');
 
 module.exports = (app) => {
 
-    const whitelist = ['http://localhost:3000']
+    const whitelist = ['http://localhost:3000', "https://meusic-web-app.herokuapp.com"];
 
     app.use(cors({
         origin: whitelist,
