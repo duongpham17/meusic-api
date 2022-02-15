@@ -13,6 +13,7 @@ const createSecureToken = (user, statusCode, res, name = "jwt") => {
 
     const cookieOptions = {
         expires: new Date(Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000)),
+        maxAge: process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000,
         httpOnly: inDevelopment ? false : true,
         secure: inDevelopment ? false : true,
         sameSite: inDevelopment ? "" : "none"
