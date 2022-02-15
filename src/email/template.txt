@@ -1,0 +1,81 @@
+Website to compile the code in to readable format: https://templates.mailchimp.com/resources/inline-css/
+
+styles 
+    <head>
+        <style>
+            a, p {
+                text-decoration: none;
+                color:#555555 
+            }
+            
+            table{
+                width: 100%;
+                border-spacing: 0px;
+                background: white;
+            }
+            
+            tr th{
+                text-align: center;
+                border: 1px solid #2ebc9d;
+                padding: 0.5rem;
+                font-size: 1.4rem;
+                background: #2ebc9d;
+            }
+            th a {
+                color: white;
+            }
+            
+            .message td, .link td{
+                text-align:center;
+            }
+            tr td{
+                height: 50px;
+            }
+            
+            .link td a{
+                border: 1px solid #2ebc9d;
+                width: 100px;
+                padding: 0.5rem 1rem;
+            }
+            
+            td footer{
+                margin-top: 5rem;
+                text-align: center;
+                background: #2ebc9d;
+                padding: 0.5rem;
+                color: white;
+            }
+        </style>
+    </head>
+
+content 
+    <body>
+        <table>   
+            <tr>
+                <th>            
+                    <a href="${websiteLink}">PacTrick</a>
+                </th>
+            </tr>
+
+            <tr class='message'>
+                <td>
+                    ${message}
+                </td>
+            </tr>
+
+            <tr class='link'>
+                <td>
+                <a class="link" href=${url}>${des}</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <footer>
+                    &#169; PacTrick, 2021. <br/> Please do not reply to this email. 
+                    </footer>
+                </td>
+            </tr>
+
+        </table>
+    </body>
