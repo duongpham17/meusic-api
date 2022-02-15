@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const {appError, catchAsync} = require('../utils/CatchError');
+const {appError, catchAsync} = require('../utils/catchError');
 
 const {emailSignup, emailLogin} = require('../email');
 

@@ -1,4 +1,4 @@
-const {appError, catchAsync} = require('../utils/CatchError');
+const {appError, catchAsync} = require('../utils/catchError');
 const CustomisePlaylist = require('../models/customisePlaylistModel');
 
 exports.createCustomisePlaylist = catchAsync(async(req, res, next) => {

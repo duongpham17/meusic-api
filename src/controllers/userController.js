@@ -1,4 +1,4 @@
-const {appError, catchAsync} = require('../utils/CatchError');
+const {appError, catchAsync} = require('../utils/catchError');
 const User = require("../models/userModel");
 
 exports.updateUsername = catchAsync(async(req, res, next) => {

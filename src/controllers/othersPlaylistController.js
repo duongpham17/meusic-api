@@ -1,4 +1,4 @@
-const {appError, catchAsync} = require('../utils/CatchError');
+const {appError, catchAsync} = require('../utils/catchError');
 const Others = require('../models/othersPlaylistModel');
 const Customise = require('../models/customisePlaylistModel');
 
