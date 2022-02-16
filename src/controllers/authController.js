@@ -76,7 +76,7 @@ exports.loggedIn = catchAsync(async (req, res, next) => {
 exports.signupEmail = catchAsync(async(req, res, next) => {
     const { email } = req.body;
 
-    let user = await User.findOne({ email, confirmation: {$exists: true} });
+    let user = await User.findOne({ email, verified: false });
 
     if (user) {
 
@@ -89,12 +89,10 @@ exports.signupEmail = catchAsync(async(req, res, next) => {
             url: confirmURL,
         });
     
-        res.status(200).json({
+        return res.status(200).json({
             status: "success",
-            message: 'resent',
+            message: 'sent',
         });
-
-        return;
     }
 
     user = await User.findOne({email});
@@ -164,6 +162,7 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
     if(linkExpired) return next(new appError("This confirmation code no longer exist", 401));
 
     user.confirmation = undefined;
+    user.verified = undefined;
 
     await user.save();
 

@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     link_expiration_time:{
         type: Date,
         default: Date.now() + (1 * 60 * 60 * 1000),
+    },
+    verified: {
+        type: Boolean,
+        default: false
     }
 });
 
