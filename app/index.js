@@ -4,8 +4,6 @@ const express = require('express');
 
 const app = express();
 
-require('./cors')(app);
-
 require('./security')(app);
 
 require('./limiter')(app);

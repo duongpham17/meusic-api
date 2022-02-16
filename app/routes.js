@@ -1,3 +1,7 @@
+const {corsPrivate, corsPublic} = require('./cors');
+
+const publicRoutes = require('../src/routes/publicRoutes');
+
 const userRoutes = require('../src/routes/userRoutes');
 const authRoutes = require('../src/routes/authRoutes');
 const songRoutes = require('../src/routes/songRoutes');
@@ -9,6 +13,11 @@ const {errorMessage} = require('../src/utils/catchError');
 
 module.exports = (app) => {
 
+    //public api
+    app.use('/api/public', corsPublic(), publicRoutes);
+
+    //website api only
+    app.use(corsPrivate());
     app.use('/api/auth', authRoutes);
     app.use('/api/users', userRoutes);
     app.use('/api/songs', songRoutes);
