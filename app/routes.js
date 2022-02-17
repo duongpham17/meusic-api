@@ -17,7 +17,7 @@ module.exports = (app) => {
     app.use('/api/public', corsPublic(), publicRoutes);
 
     //website api only
-    app.use(corsPrivate(app));
+    app.use(corsPrivate());
     app.use('/api/auth', authRoutes);
     app.use('/api/users', userRoutes);
     app.use('/api/songs', songRoutes);
