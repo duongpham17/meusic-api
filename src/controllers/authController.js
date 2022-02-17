@@ -11,8 +11,10 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const createSecureToken = (res, user) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRES}d` });
 
+    const expireInNumber = Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000);
+
     const cookieOptions = {
-        expires: new Date(Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000)),
+        expires: new Date(expireInNumber),
         maxAge: process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000,
         sameSite: isDevelopment ? "" : "none",
         httpOnly: isDevelopment ? false : true,
@@ -21,7 +23,12 @@ const createSecureToken = (res, user) => {
 
     res.cookie("jwt", token, cookieOptions);
 
-    return token;
+    const cookie = {
+        token: `Bearer ${token}`,
+        expires: expireInNumber
+    }
+
+    return cookie;
 };
 
 exports.protect = catchAsync(async(req, res, next) => {
@@ -29,8 +36,6 @@ exports.protect = catchAsync(async(req, res, next) => {
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         token = req.headers.authorization.split(' ')[1]
-    } else if(req.cookies.jwt) {
-        token = req.cookies.jwt
     }
 
     if(!token) return next(new appError('Login to access these features', 401));
@@ -162,12 +167,12 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
 
     await user.save();
 
-    const token = createSecureToken(res, user);
+    const cookie = createSecureToken(res, user);
 
     res.status(200).json({
         status: "success",
         user,
-        token,
+        cookie
     });
 });
 
@@ -180,7 +185,6 @@ exports.logout = async (req, res, next) => {
     }
 
     res.cookie('jwt', 'expiredtoken', options);
-    res.cookie('login', 'expiredToken', options);
 
     res.status(200).json({
         status: 'success'
