@@ -6,36 +6,23 @@ const {emailSignup, emailLogin} = require('../email');
 const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 
-const inDevelopment = process.env.NODE_ENV === "development";
+const isDevelopment = process.env.NODE_ENV === "development";
 
-const createSecureToken = (user, statusCode, res) => {
+const createSecureToken = (res, user) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRES}d` });
 
-    const cookieOption = {
+    const cookieOptions = {
         expires: new Date(Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000)),
         maxAge: process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000,
-        sameSite: inDevelopment ? "" : "none",
-        httpOnly: inDevelopment ? false : true,
-    }
-
-    const cookieOptionsSecure = {
-        ...cookieOption,
-        secure: inDevelopment ? false : true,
+        domain: isDevelopment ? ['http://localhost:3000'] : ["https://meusic-web-app.herokuapp.com"],
+        sameSite: isDevelopment ? "" : "none",
+        httpOnly: isDevelopment ? false : true,
+        secure: isDevelopment ? false : true,
     };
 
-    const cookieOptionsNotSecure = {
-        ...cookieOption,
-        secure: false,
-    }
+    res.cookie("jwt", token, cookieOptions);
 
-    res.cookie("jwt", token, cookieOptionsSecure)
-    res.cookie("login", "true", cookieOptionsNotSecure);
-
-    res.status(statusCode).json({
-        status: 'success',
-        token,
-        user
-    });
+    return token;
 };
 
 exports.protect = catchAsync(async(req, res, next) => {
@@ -176,15 +163,21 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
 
     await user.save();
 
-    createSecureToken(user, 200, res);
+    const token = createSecureToken(res, user);
+
+    res.status(200).json({
+        status: "success",
+        user,
+        token,
+    });
 });
 
 
 exports.logout = async (req, res, next) => {
     const options = {
         expires: new Date( Date.now() + 2000),
-        httpOnly: inDevelopment ? false : true,
-        secure: inDevelopment ? false: true
+        httpOnly: isDevelopment ? false : true,
+        secure: isDevelopment ? false: true
     }
 
     res.cookie('jwt', 'expiredtoken', options);
