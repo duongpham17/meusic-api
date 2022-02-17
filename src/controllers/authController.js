@@ -8,18 +8,27 @@ const jwt = require('jsonwebtoken');
 
 const inDevelopment = process.env.NODE_ENV === "development";
 
-const createSecureToken = (user, statusCode, res, name = "jwt") => {
+const createSecureToken = (user, statusCode, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRES}d` });
 
-    const cookieOptions = {
+    const cookieOption = {
         expires: new Date(Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000)),
         maxAge: process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000,
         httpOnly: inDevelopment ? false : true,
+    }
+
+    const cookieOptionsSecure = {
+        ...cookieOption,
         secure: inDevelopment ? false : true,
-        sameSite: inDevelopment ? "" : "none"
     };
 
-    res.cookie(name, token, cookieOptions);
+    const cookieOptionsNotSecure = {
+        ...cookieOption,
+        secure: false,
+    }
+
+    res.cookie("jwt", token, cookieOptionsSecure)
+    res.cookie("login", "true", cookieOptionsNotSecure);
 
     res.status(statusCode).json({
         status: 'success',
@@ -178,6 +187,7 @@ exports.logout = async (req, res, next) => {
     }
 
     res.cookie('jwt', 'expiredtoken', options);
+    res.cookie('login', 'expiredToken', options);
 
     res.status(200).json({
         status: 'success'
