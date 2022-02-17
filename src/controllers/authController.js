@@ -14,7 +14,6 @@ const createSecureToken = (res, user) => {
     const cookieOptions = {
         expires: new Date(Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000)),
         maxAge: process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000,
-        domain: isDevelopment ? ['http://localhost:3000'] : ["https://meusic-web-app.herokuapp.com"],
         sameSite: isDevelopment ? "" : "none",
         httpOnly: isDevelopment ? false : true,
         secure: isDevelopment ? false : true,
