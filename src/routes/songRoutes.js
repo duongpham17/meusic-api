@@ -8,5 +8,6 @@ router.get('/:title', song.searchSongs);
 
 router.use(auth.protect);
 router.post('/upload', song.uploadSong);
+router.post('/upload/test', song.uploadTesting);
 
 module.exports = router;

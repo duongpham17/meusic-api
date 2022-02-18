@@ -32,7 +32,7 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
     if(customSong) {
         songInfo.song = customSong;
         songInfo.artist = customArtist;
-    }
+    };
 
     if(!songInfo.song) return next(new appError("undefined", 401));
 
@@ -75,6 +75,30 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
     res.status(201).json({
         status: "success",
         song,
+    });
+});
+
+exports.uploadTesting = catchAsync(async(req, res, next) => {  
+    const {url} = req.body;
+
+    const getSongInfoFromYtdl = async (url) => {
+        const info = await ytdl.getInfo(url);
+        const format = info.formats.filter(i => i.mimeType.includes("audio/mp4"));
+        return {
+            url : format[0].url,
+            title: info.videoDetails.title,
+            song: info.videoDetails.media.song,
+            artist: info.videoDetails.media.artist,
+            duration: info.videoDetails.lengthSeconds,
+            image: info.videoDetails.thumbnails[0].url
+        };
+    };
+
+    const songInfo = await getSongInfoFromYtdl(url);
+
+    res.status(201).json({
+        status: "success",
+        song: songInfo
     });
 });
 
