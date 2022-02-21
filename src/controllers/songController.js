@@ -5,10 +5,6 @@ const Playlist = require('../models/savedPlaylistModel');
 const ytdl = require('ytdl-core');
 const { NFTStorage, Blob } = require('nft.storage');
 const axios = require('axios');
-
-const token = process.env.NFT_STORAGE_API_KEY;
-const endpoint = 'https://api.nft.storage'
-
 const fetch = require('node-fetch');
 
 exports.uploadSong = catchAsync(async (req, res, next) => {
@@ -34,7 +30,7 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
         songInfo.artist = customArtist;
     };
 
-    if(!songInfo.song) return next(new appError("undefined", 401));
+    if(!songInfo.song || !songInfo.artist) return next(new appError("undefined", 401));
 
     const isDownloaded = async (song, title) => {
         const music = await Song.find().select(["title", "song"]);
@@ -57,6 +53,8 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
     const bufferedAudio = await downloadSongAsBufferFromUrl(songInfo.url)
 
     const uploadToStorage = async (bufferedAudio) => {
+        const token = process.env.NFT_STORAGE_API_KEY;
+        const endpoint = 'https://api.nft.storage'
         const storage = new NFTStorage({ endpoint, token })
         const cid = await storage.storeBlob(new Blob([bufferedAudio]));
         return cid;
