@@ -1,0 +1,54 @@
+/* This file should not contain any color changes*/
+
+* {
+    padding: 0;
+    margin: 0;
+    color: var(--main);
+}
+
+html, body {
+    font-family: "Gill Sans", sans-serif;
+    min-height: 100vh;
+    min-width: 320px;
+}    
+
+a, button, input, li, textarea, svg, div, ul, li{
+    text-decoration: none;
+    list-style-type: none;
+    outline: none;
+    border: none;
+    background: none;
+    resize: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+a, button{
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+img{
+    object-fit: cover;
+}
+
+p, span, div{
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+input{
+    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+        display: none;
+    }
+    [type=number] {
+        -moz-appearance: textfield;
+    }
+}
+
+select{
+    outline: none;
+}

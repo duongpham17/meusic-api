@@ -103,12 +103,34 @@ exports.uploadTesting = catchAsync(async(req, res, next) => {
 exports.searchSongs = catchAsync(async(req, res, next) => {  
     const {title} = req.params;
 
-    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).limit(50);
+    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).limit(30);
 
     res.status(200).json({
         status: "success",
         songs,
     });
+});
+
+exports.getAllSongs = catchAsync(async(req, res, next) => {
+
+    const songs = await Song.find();
+
+    res.status(200).json({
+        status: "success",
+        songs,
+    });
+});
+
+exports.getLimitSongs = catchAsync(async(req, res, next) => {
+    const limit = req.params.limit;
+
+    const songs = await Song.find().limit(limit);
+
+    res.status(200).json({
+        status: "success",
+        songs,
+    });
+
 });
 
 exports.getSongs = catchAsync(async(req, res, next) => {

@@ -12,6 +12,8 @@ require('./parser')(app, express);
 
 require('./routes')(app);
 
+require('./heroku')(app, express);
+
 require('./mongodb')();
 
 require('./port')(app);

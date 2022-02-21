@@ -1,0 +1,47 @@
+.container{
+    padding: 0.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--main-light);
+    border-radius: 5px;
+
+    .title{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        svg{
+            display: flex;
+            font-size: 2rem;
+        }
+    }
+
+    .endpoint{
+        background-color: black;
+        padding: 1rem 0.5rem;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        svg, span{
+            display: flex;
+            color: white;
+        }
+    }
+
+    b{
+        margin: 0.3rem 0;
+        display: block;
+    }
+
+
+    pre{
+        background-color: black;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+}
