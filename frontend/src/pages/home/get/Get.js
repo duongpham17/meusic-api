@@ -11,7 +11,7 @@ export const GetRequest = () => {
 
       <RequestComponent endpoint="songs/all" description="All songs" />
 
-      <RequestComponent endpoint="songs/limit/:limit" description="Limit Songs results" />
+      <RequestComponent endpoint="songs/limit/:limit" description="Limit songs results" />
 
       <RequestComponent endpoint="songs/search/:title" description="Search songs" />
 
