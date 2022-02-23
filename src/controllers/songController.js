@@ -1,6 +1,6 @@
 const {appError, catchAsync} = require('../utils/catchError');
 const Song = require('../models/songModel');
-const Playlist = require('../models/savedPlaylistModel');
+const Saved = require('../models/savedPlaylistModel');
 
 const ytdl = require('ytdl-core');
 const { NFTStorage, Blob } = require('nft.storage');
@@ -68,7 +68,7 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
     }
 
     const song = await Song.create(data);
-    await Playlist.create({song: song._id, user: req.user.id});
+    await Saved.create({song: song._id, user: req.user.id, artist: data.artist});
 
     res.status(201).json({
         status: "success",
@@ -135,11 +135,16 @@ exports.getLimitSongs = catchAsync(async(req, res, next) => {
 
 exports.getSongs = catchAsync(async(req, res, next) => {
 
-    const songs = await Song.find().sort({createdAt: -1}).limit(25);
+    const songs = await Song.find().sort({createdAt: -1}).limit(50);
+
+    const total = await Song.countDocuments();
+
+    console.log(total)
 
     res.status(200).json({
         status: "success",
         songs,
+        total
     });
 });
 
