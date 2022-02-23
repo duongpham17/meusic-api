@@ -6,7 +6,8 @@ router.get('/', song.getSongs);
 router.get('/all', song.getAllSongs);
 router.get('/limit/:limit', song.getLimitSongs);
 router.get('/search/:title', song.searchSongs);
-router.get('/played/:id', song.incrementSongPlayed)
+router.get('/played/:id', song.incrementSongPlayed);
+router.get('/total', song.getTotalSongs);
 
 router.use(auth.protect);
 router.post('/upload', song.uploadSong);

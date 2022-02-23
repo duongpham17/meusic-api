@@ -135,15 +135,19 @@ exports.getLimitSongs = catchAsync(async(req, res, next) => {
 
 exports.getSongs = catchAsync(async(req, res, next) => {
 
-    const songs = await Song.find().sort({createdAt: -1}).limit(50);
-
-    const total = await Song.countDocuments();
-
-    console.log(total)
+    const songs = await Song.find().limit(50)
 
     res.status(200).json({
         status: "success",
-        songs,
+        songs
+    });
+});
+
+exports.getTotalSongs = catchAsync(async(req, res, next) => {
+    const total = await Song.countDocuments();
+
+    res.status(200).json({
+        status: "success",
         total
     });
 });
