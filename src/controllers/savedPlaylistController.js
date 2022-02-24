@@ -4,11 +4,13 @@ const SavedPlaylist = require('../models/savedPlaylistModel');
 
 exports.getSavedPlaylist = catchAsync(async(req, res, next) => {
     const userId = req.user.id;
+    const sort = req.query.sort;
 
-    const query = {user: userId};
+    const sortQuery = sort === "artist" || sort === "undefined" ? {artist: 1} : {createdAt: -1};
+    const findQuery = {user: userId};
     const populate = {path: "song"};
 
-    let saved = await SavedPlaylist.find(query).sort({artist: 1}).populate(populate);
+    let saved = await SavedPlaylist.find(findQuery).sort(sortQuery).populate(populate);
 
     saved = saved.map(el => el.song);
 
@@ -30,7 +32,7 @@ exports.addToSavedPlaylist = catchAsync(async(req, res, next) => {
     const song = await Song.findById(songId);
 
     const data = {
-        ...song._doc,
+        artist: song.artist,
         user: userId,
         song: songId,
     };
