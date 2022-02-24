@@ -6,7 +6,7 @@ exports.getSavedPlaylist = catchAsync(async(req, res, next) => {
     const userId = req.user.id;
     const sort = req.query.sort;
 
-    const sortQuery = sort === "artist" || sort === "undefined" ? {artist: 1} : {createdAt: -1};
+    const sortQuery = sort === "newest" || sort === "undefined" ? {createdAt: -1} : {artist: 1};
     const findQuery = {user: userId};
     const populate = {path: "song"};
 
