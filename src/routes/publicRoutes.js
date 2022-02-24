@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const public = require('../controllers/publicController');
 
-router.get('/', public.getSongs);
+router.get('/', public.get100Songs);
 router.get('/all', public.getAllSongs);
 router.get('/title/:title', public.searchSongsBasedOnTitle);
 router.get('/artist/:artist', public.searchSongsBasedOnArtist);
