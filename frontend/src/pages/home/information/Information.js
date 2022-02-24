@@ -6,16 +6,16 @@ import {connect} from 'react-redux';
 
 const Information = ({setAlert}) => {
 
-    const onCopy = (value) => () => {
-        navigator.clipboard.writeText(value);
+    const onCopy = () => () => {
+        navigator.clipboard.writeText("https://meusic-api-app.herokuapp.com/api/public");
         setAlert("Copied", "success");
     }
 
     return (
         <div className={styles.container}>
             <p>
-                <span>URL - https://meusic-api-app.herokuapp.com/api</span>
-                <button onClick={onCopy("https://meusic-api-app.herokuapp.com/api")}><BiCopy/></button>
+                <span>URL - https://meusic-api-app.herokuapp.com/api/public</span>
+                <button onClick={onCopy}><BiCopy/></button>
             </p>
         </div>
     )

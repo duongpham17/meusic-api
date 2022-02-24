@@ -11,8 +11,10 @@ export const RequestComponent = ({endpoint, title, description, setAlert}) => {
 
     const [open, setOpen] = useState(false);
 
+    const url = "https://meusic-api-app.herokuapp.com/api/public";
+
     const onCopy = (value) => () => {
-        navigator.clipboard.writeText(`https://meusic-api-app.herokuapp.com/api${value}`);
+        navigator.clipboard.writeText(`${url}${value}`);
         setAlert("Copied Endpoint", "success");
     }
     
@@ -31,7 +33,7 @@ export const RequestComponent = ({endpoint, title, description, setAlert}) => {
             <br/>
             <b>Endpoint</b>
             <p className={styles.endpoint} onClick={onCopy(endpoint)}>
-                <span>https://meusic-api-app.herokuapp.com/api{endpoint}</span>
+                <span>{url}{endpoint}</span>
                 <BiCopy/>
             </p> 
             <br/>
