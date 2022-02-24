@@ -14,7 +14,7 @@ const {errorMessage} = require('../src/utils/catchError');
 module.exports = (app) => {
 
     //public api
-    app.use('/api/public', corsPublic(), publicRoutes);
+    app.use('/api', corsPublic(), publicRoutes);
 
     //website api only
     app.use(corsPrivate());

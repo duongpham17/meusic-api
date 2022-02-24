@@ -76,66 +76,13 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.uploadTesting = catchAsync(async(req, res, next) => {  
-    const {url} = req.body;
-
-    const getSongInfoFromYtdl = async (url) => {
-        const info = await ytdl.getInfo(url);
-        const format = info.formats.filter(i => i.mimeType.includes("audio/mp4"));
-        return {
-            url : format[0].url,
-            title: info.videoDetails.title,
-            song: info.videoDetails.media.song,
-            artist: info.videoDetails.media.artist,
-            duration: info.videoDetails.lengthSeconds,
-            image: info.videoDetails.thumbnails[0].url
-        };
-    };
-
-    const songInfo = await getSongInfoFromYtdl(url);
-
-    res.status(201).json({
-        status: "success",
-        song: songInfo
-    });
-});
-
-exports.searchSongs = catchAsync(async(req, res, next) => {  
-    const {title} = req.params;
-
-    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).limit(30);
-
-    res.status(200).json({
-        status: "success",
-        songs,
-    });
-});
-
-exports.getAllSongs = catchAsync(async(req, res, next) => {
-
-    const songs = await Song.find();
-
-    res.status(200).json({
-        status: "success",
-        songs,
-    });
-});
-
-exports.getLimitSongs = catchAsync(async(req, res, next) => {
-    const limit = req.params.limit;
-
-    const songs = await Song.find().limit(limit);
-
-    res.status(200).json({
-        status: "success",
-        songs,
-    });
-
-});
-
 exports.getSongs = catchAsync(async(req, res, next) => {
 
-    const songs = await Song.find().limit(50)
+    const sort = req.query.sort;
+
+    const sortQuery = sort === "undefined" || sort === "newest" ? {createdAt: -1} : {played: -1};
+
+    const songs = await Song.find().sort(sortQuery).limit(100);
 
     res.status(200).json({
         status: "success",
@@ -149,6 +96,17 @@ exports.getTotalSongs = catchAsync(async(req, res, next) => {
     res.status(200).json({
         status: "success",
         total
+    });
+});
+
+exports.searchSongs = catchAsync(async(req, res, next) => {  
+    const {title} = req.params;
+
+    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).limit(30);
+
+    res.status(200).json({
+        status: "success",
+        songs,
     });
 });
 
