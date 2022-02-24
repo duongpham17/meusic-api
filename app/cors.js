@@ -8,8 +8,8 @@ exports.corsPrivate = () => {
 
     return cors({
         origin: whitelist,
-        methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept']
+        methods: ['GET','POST','DELETE','PUT','PATCH'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept'],
     });
 };
 

@@ -77,9 +77,8 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
 });
 
 exports.getSongs = catchAsync(async(req, res, next) => {
-
     const sort = req.query.sort;
-
+    
     const sortQuery = sort === "undefined" || sort === "newest" ? {createdAt: -1} : {played: -1};
 
     const songs = await Song.find().sort(sortQuery).limit(100);
@@ -101,8 +100,11 @@ exports.getTotalSongs = catchAsync(async(req, res, next) => {
 
 exports.searchSongs = catchAsync(async(req, res, next) => {  
     const {title} = req.params;
+    const sort = req.query.sort;
 
-    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).limit(30);
+    const sortQuery = sort === "undefined" || sort === "newest" ? {createdAt: -1} : {played: -1};
+
+    const songs = await Song.find({title: {$regex: new RegExp(title, "i") }}).sort(sortQuery).limit(30);
 
     res.status(200).json({
         status: "success",
