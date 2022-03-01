@@ -14,6 +14,14 @@ const songSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    cid: {
+        type: String,
+        trim: true
+    },
+    cidRemoved: {
+        type: Boolean,
+        default: false
+    },
     duration: {
         type: Number
     },
@@ -28,7 +36,7 @@ const songSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now()
-    }
+    },
 });
 
 songSchema.pre("save", function (next){

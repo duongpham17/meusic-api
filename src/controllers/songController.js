@@ -4,7 +4,6 @@ const Saved = require('../models/savedPlaylistModel');
 
 const ytdl = require('ytdl-core');
 const { NFTStorage, Blob } = require('nft.storage');
-const axios = require('axios');
 const fetch = require('node-fetch');
 
 exports.uploadSong = catchAsync(async (req, res, next) => {
@@ -64,6 +63,7 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
 
     const data = {
         ...songInfo,
+        cid,
         url: `https://${cid}.ipfs.dweb.link`,
     }
 
@@ -110,36 +110,11 @@ exports.getTotalSongs = catchAsync(async(req, res, next) => {
     });
 });
 
-
-exports.deleteSong = catchAsync(async(req, res, next) => {
-
-    const musicID = req.params.id;
-
-    const music = await Song.findById(musicID);
-
-    const cid = music.url.replace("https://", "").split(".")[0]
-
-    const endpoint = `https://api.nft.storage/${cid}`;
-
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    };
-
-    // delete from nft.storage
-    await axios.delete(endpoint, config);
-    // delete from mongodb
-    await Song.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-        status: "success",
-    });
-});
-
 exports.incrementSongPlayed = catchAsync(async(req, res, next) => {
 
     const id = req.params.id;
 
-    await Song.findByIdAndUpdate(id, {$inc: {played: 1}}, {new: true})
+    await Song.findByIdAndUpdate(id, {$inc: {played: 1}}, {new: true});
 
     res.status(200).json({
         status: "success",
