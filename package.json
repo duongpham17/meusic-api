@@ -25,7 +25,7 @@
     "nft.storage": "^4.0.1",
     "nodemailer": "^6.7.2",
     "xss-clean": "^0.1.1",
-    "ytdl-core": "^4.10.1"
+    "ytdl-core": "^4.11.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
