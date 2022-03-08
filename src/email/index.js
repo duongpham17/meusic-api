@@ -22,9 +22,9 @@ exports.emailSignup = async (data) => {
         subject: "Confirm Email",
         html: `
             ${authTemplate(
-                "Verify email by clicking the box below.",
                 "Confirm Email",
-                data.url
+                data.url,
+                data.code
             )}
         `
     }
@@ -41,9 +41,9 @@ exports.emailLogin = async (data) => {
         subject: "Magic Link",
         html: `
             ${authTemplate(
-                "Hello, you requested a login link",
-                "Login to Meusic",
+                "Login now",
                 data.url, 
+                data.code
             )}
         `
     }

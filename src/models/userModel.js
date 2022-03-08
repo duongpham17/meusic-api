@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -23,6 +24,10 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    code: {
+        type: String,
+        select: false,
+    },
     confirmation: {
         type: String
     },
@@ -31,26 +36,44 @@ const userSchema = new mongoose.Schema({
         default: Date.now() + (1 * 60 * 60 * 1000),
     },
     verified: {
-        type: Boolean,
-        default: false
+        type: Boolean
     }
 });
+
+//hashing the code
+userSchema.pre('save', async function(next){
+    //only run this when password has been modified
+    if(!this.code) return next();
+
+    //hash password
+    this.code = await bcrypt.hash(this.code, 12);
+
+    next();
+});
+
+//check if confirm password matches the encrypted password.
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword){
+    return bcrypt.compare(candidatePassword, userPassword)
+}
 
 //generate a random token to verify users email
 userSchema.methods.createVerifyToken = function(){
     const verifyToken = crypto.randomBytes(32).toString('hex');
     const hashToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
 
+    const code = Math.floor(100000 + Math.random() * 900000);
+
     //given to user to verify account
+    this.code = code;
     this.confirmation = hashToken;
 
-    //link will expire timer
-    this.link_expiration_time = Date.now() + (1 * 60 * 60 * 1000);
+    //link will expire timer in 5min
+    this.link_expiration_time = Date.now() + ( 5 * 60 * 1000);
 
     this.save();
 
-    return hashToken;
-}
+    return {hashToken, code};
+};
 
 const User = mongoose.model('User', userSchema);
 

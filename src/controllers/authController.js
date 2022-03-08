@@ -67,13 +67,14 @@ exports.signupEmail = catchAsync(async(req, res, next) => {
 
     if (user) {
 
-        const hashToken = user.createVerifyToken();
+        const {code, hashToken} = user.createVerifyToken();
 
-        const confirmURL = `/confirm/${hashToken}`;
+        const confirmURL = `/confirm/${code}-${hashToken}`;
     
         await emailSignup({
             email: user.email,
             url: confirmURL,
+            code
         });
     
         return res.status(200).json({
@@ -100,15 +101,16 @@ exports.signupUsername = catchAsync(async (req, res, next) => {
 
     if (user) return next(new appError("Username has been taken", 401));
 
-    user = await User.create({ email, username });
+    user = await User.create({ email, username, verified: false });
 
-    const hashToken = user.createVerifyToken();
+    const {code, hashToken} = user.createVerifyToken();
 
-    const confirmURL = `/confirm/${hashToken}`;
+    const confirmURL = `/confirm/${code}-${hashToken}`;
 
     await emailSignup({
         email: user.email,
         url: confirmURL,
+        code
     });
 
     res.status(200).json({
@@ -124,13 +126,14 @@ exports.login = catchAsync(async(req, res, next) => {
 
     if(!user) return next(new appError("Incorrect credentials", 401));
 
-    const hashToken = user.createVerifyToken();
+    const {code, hashToken} = user.createVerifyToken();
 
-    const confirmURL = `/confirm/${hashToken}`;
+    const confirmURL = `/confirm/${`${code}-${hashToken}`}`;
 
     await emailLogin({
         email: user.email,
         url: confirmURL,
+        code
     });
 
     res.status(200).json({
@@ -140,14 +143,51 @@ exports.login = catchAsync(async(req, res, next) => {
 });
 
 exports.confirmEmail = catchAsync(async (req, res, next) => {
-    const confirmation = req.params.code;
+    const token = req.params.code;
 
-    let user = await User.findOne({confirmation});
+    const [code, confirmation] = token.split("-");
+
+    let user = await User.findOne({confirmation}).select('+code');
 
     const linkExpired = Date.now() > user.link_expiration_time;
 
     if(linkExpired) return next(new appError("This confirmation code no longer exist", 401));
 
+    const correctUser = !user || await user.correctPassword(code, user.code);
+
+    if (!correctUser) return next(new appError("This confirmation code no longer exist", 401));
+
+    user.code = undefined;
+    user.confirmation = undefined;
+    user.verified = undefined;
+
+    await user.save();
+
+    const cookie = createSecureToken(user);
+
+    res.status(200).json({
+        status: "success",
+        user,
+        cookie
+    });
+});
+
+exports.confirmCode = catchAsync(async (req, res, next) => {
+    const {code, email} = req.body;
+
+    console.log(code, email)
+
+    let user = await User.findOne({email}).select('+code');
+
+    const linkExpired = Date.now() > user.link_expiration_time;
+
+    if(linkExpired) return next(new appError("This confirmation code no longer exist", 401));
+
+    const correctUser = !user || await user.correctPassword(code, user.code);
+
+    if (!correctUser) return next(new appError("This confirmation code no longer exist", 401));
+
+    user.code = undefined;
     user.confirmation = undefined;
     user.verified = undefined;
 
