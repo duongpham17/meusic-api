@@ -175,8 +175,6 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
 exports.confirmCode = catchAsync(async (req, res, next) => {
     const {code, email} = req.body;
 
-    console.log(code, email)
-
     let user = await User.findOne({email}).select('+code');
 
     const linkExpired = Date.now() > user.link_expiration_time;
