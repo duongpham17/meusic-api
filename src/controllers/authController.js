@@ -57,7 +57,7 @@ exports.loggedIn = catchAsync(async (req, res, next) => {
     res.status(201).json({
         status: "success",
         user
-    })
+    });
 });
 
 exports.signupEmail = catchAsync(async(req, res, next) => {

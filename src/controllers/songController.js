@@ -77,9 +77,12 @@ exports.uploadSong = catchAsync(async (req, res, next) => {
 });
 
 exports.getSongs = catchAsync(async(req, res, next) => {
-    const {sort} = req.query;
+    const {sort, limit} = req.query;
 
-    const songs = await Song.find().sort(sort || "-createdAt").limit(100);
+    const songs = await Song
+        .find()
+        .sort(sort || "-createdAt")
+        .limit(limit || 100);
 
     res.status(200).json({
         status: "success",
