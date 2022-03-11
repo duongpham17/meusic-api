@@ -37,6 +37,18 @@ exports.updateCustomisePlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
+exports.duplicateCustomisePlaylist = catchAsync(async(req, res, next) => {
+    const {name, song, user} = req.body;
+
+    const customise = await CustomisePlaylist.create({name, song, user});
+
+    res.status(200).json({
+        status: "success",
+        customise
+    });
+});
+
+
 exports.deleteCustomisePlaylist = catchAsync(async(req, res, next) => {
     const id = req.params.id;
 
@@ -46,6 +58,7 @@ exports.deleteCustomisePlaylist = catchAsync(async(req, res, next) => {
         status: "success",
     });
 });
+
 
 exports.saveOthersPlaylistToCustomisePlaylist = catchAsync(async(req, res, next) => {
     const {song, name} = req.body;
