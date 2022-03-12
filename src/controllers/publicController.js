@@ -1,7 +1,7 @@
 const {catchAsync} = require('../utils/catchError');
 const Song = require('../models/songModel');
 
-exports.getAllSongs = catchAsync(async(req, res, next) => {
+exports.getSongs = catchAsync(async(req, res, next) => {
     const songs = await Song.find().sort({createdAt: -1});
 
     res.status(200).json({
