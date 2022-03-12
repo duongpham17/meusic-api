@@ -81,8 +81,8 @@ exports.getSongs = catchAsync(async(req, res, next) => {
 
     const songs = await Song
         .find()
-        .sort(sort || "-createdAt")
-        .limit(limit || 100);
+        .limit(limit || 100)
+        .sort(sort || "-createdAt");
 
     res.status(200).json({
         status: "success",
@@ -95,8 +95,8 @@ exports.searchSongs = catchAsync(async(req, res, next) => {
 
     const songs = await Song
         .find({title: {$regex: new RegExp(title, "i") }})
-        .sort(sort || '-createdAt')
-        .limit(30);
+        .limit(30)
+        .sort(sort || '-createdAt');
 
     res.status(200).json({
         status: "success",

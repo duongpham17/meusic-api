@@ -8,13 +8,7 @@ export const GetRequest = () =>
       <h2>GET Request</h2>
 
       <RequestComponent 
-        endpoint="?sort={sort}"
-        title="Get 100 songs" 
-        description="Query - Change {sort} - for - Newest {-createdAt} - Most played {-played} " 
-      />
-
-      <RequestComponent 
-        endpoint="/all" 
+        endpoint="/" 
         title="Get All songs" 
       />
 
