@@ -5,7 +5,6 @@ const song = require('../controllers/songController');
 router.get('/', song.getSongs);
 router.get('/total', song.getTotalSongs);
 router.get('/played/:id', song.incrementSongPlayed);
-router.get('/search', song.searchSongs)
 
 router.use(auth.protect);
 router.post('/upload', song.uploadSong);
