@@ -9,6 +9,7 @@ router.post('/', customisePlaylist.createCustomisePlaylist);
 router.patch('/', customisePlaylist.updateCustomisePlaylist);
 router.post('/duplicate', customisePlaylist.duplicateCustomisePlaylist);
 router.delete('/:id', customisePlaylist.deleteCustomisePlaylist);
-router.post('/others', customisePlaylist.saveOthersPlaylistToCustomisePlaylist)
+router.post('/others', customisePlaylist.saveOthersPlaylistToCustomisePlaylist);
+router.patch('/reorder', customisePlaylist.reorderCustomisePlaylist);
 
 module.exports = router;

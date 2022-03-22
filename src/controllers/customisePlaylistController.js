@@ -17,7 +17,7 @@ exports.createCustomisePlaylist = catchAsync(async(req, res, next) => {
 exports.getCustomisePlaylist = catchAsync(async(req, res, next) => {
     const userID = req.user.id
 
-    const customise = await CustomisePlaylist.find({user: userID});
+    const customise = await CustomisePlaylist.find({user: userID}).sort({createdAt: -1})
 
     res.status(200).json({
         status: "success",
@@ -36,6 +36,23 @@ exports.updateCustomisePlaylist = catchAsync(async(req, res, next) => {
         customise
     });
 });
+
+exports.reorderCustomisePlaylist = catchAsync(async(req, res, next) => {
+    const data = req.body;
+
+    const sortedDateByNewest = data.map(el => el.createdAt).sort((a, b) => new Date(b) - new Date(a));
+
+    for(let index in data){
+        const playlist = data[index];
+        const createdAt = sortedDateByNewest[index];
+        const positionChanged = playlist.createdAt !== createdAt;
+        if(positionChanged) await CustomisePlaylist.findByIdAndUpdate(playlist._id, {createdAt});
+    }
+
+    res.status(200).json({
+        status: "success"
+    });
+})
 
 exports.duplicateCustomisePlaylist = catchAsync(async(req, res, next) => {
     const {name, song, user} = req.body;
