@@ -2,7 +2,22 @@ const {appError, catchAsync} = require('../utils/catchError');
 const Others = require('../models/othersPlaylistModel');
 const Customise = require('../models/customisePlaylistModel');
 
-exports.findOthersPlaylist = catchAsync(async(req, res, next) => {
+exports.getOthersPlaylist = catchAsync(async(req, res, next) => {
+    const user = req.user.id;
+
+    let others = await Others.find({user}).populate("others");
+
+    others.forEach(async el => !el.others && await Others.findByIdAndDelete(el._id, {new:true}));
+
+    others = others.map(el => el.others);
+
+    res.status(200).json({
+        status: "success",
+        others
+    });
+});
+
+exports.searchOthersPlaylist = catchAsync(async(req, res, next) => {
     const name = req.params.name;
 
     let others = await Customise.find({name: {$regex: new RegExp(name, "i") }}).limit(40);
@@ -35,21 +50,6 @@ exports.saveOthersPlaylist = catchAsync(async(req, res, next) => {
     res.status(200).json({
         status: "success",
         others: data.others
-    });
-});
-
-exports.getOthersPlaylist = catchAsync(async(req, res, next) => {
-    const user = req.user.id;
-
-    let others = await Others.find({user}).populate("others");
-
-    others.forEach(async el => !el.others && await Others.findByIdAndDelete(el._id, {new:true}));
-
-    others = others.map(el => el.others);
-
-    res.status(200).json({
-        status: "success",
-        others
     });
 });
 

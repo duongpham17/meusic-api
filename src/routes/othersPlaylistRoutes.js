@@ -6,7 +6,7 @@ router.use(auth.protect);
 
 router.get('/', others.getOthersPlaylist);
 router.post('/:id', others.saveOthersPlaylist);
-router.get('/:name', others.findOthersPlaylist);
+router.get('/:name', others.searchOthersPlaylist);
 router.delete('/:id', others.deleteOthersPlaylist);
 
 module.exports = router;
