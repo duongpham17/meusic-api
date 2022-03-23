@@ -47,7 +47,7 @@ exports.reorderCustomisePlaylist = catchAsync(async(req, res, next) => {
         const createdAt = sortedDateByNewest[index];
         const positionChanged = playlist.createdAt !== createdAt;
         if(positionChanged) await CustomisePlaylist.findByIdAndUpdate(playlist._id, {createdAt});
-    }
+    };
 
     res.status(200).json({
         status: "success"
