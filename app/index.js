@@ -1,8 +1,8 @@
 require('dotenv').config({path: "./config.env" });
 
 const express = require('express');
-
 const app = express();
+const http = require('http').Server(app);
 
 require('./security')(app);
 
@@ -14,6 +14,8 @@ require('./routes')(app);
 
 require('./heroku')(app, express);
 
+require('./socket')(http);
+
 require('./mongodb')();
 
-require('./port')(app);
+require('./port')(http);
