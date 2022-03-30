@@ -9,6 +9,7 @@ router.post('/', room.createRoom);
 router.get('/search/:name', room.searchRooms);
 router.get('/:name', room.getRoom);
 router.patch('/private', room.privateRoom);
+router.post('/password', room.checkPasswordOfRoom);
 router.delete('/:id', room.deleteRoom);
 
 

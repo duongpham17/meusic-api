@@ -8,9 +8,10 @@ const roomSchema = new mongoose.Schema({
     room: {
         type: String,
     },
-    vip: [
+    verified: [
         {
-            type: String
+            type: mongoose.Schema.ObjectId,
+            ref: 'User',
         }
     ],
     private: {

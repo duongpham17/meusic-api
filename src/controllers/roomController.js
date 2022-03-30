@@ -55,15 +55,41 @@ exports.createRoom = catchAsync(async(req, res, next) => {
 });
 
 exports.privateRoom = catchAsync(async(req, res, next) => {
-    const {password, _id} = req.body;
+    const {password, _id, private} = req.body;
+    
+    let room;
 
-    const room = await Room.findByIdAndUpdate(_id, {password, private: true}, {new: true});
+    if(private){
+        room = await Room.findByIdAndUpdate(_id, {password, private: true}, {new: true});
+    }
+
+    if(!private){
+        room = await Room.findByIdAndUpdate(_id, {password: undefined, private: false}, {new: true});
+    }
 
     res.status(200).json({
         status: "success",
         room
     });
 });  
+
+exports.checkPasswordOfRoom = catchAsync(async(req, res, next) => {
+    const {password, _id} = req.body;
+    const userID = req.user.id;
+
+    let room = await Room.findById(_id).select("+password");
+
+    const correct = room.password === password;
+
+    if(!correct) return next(new appError("Password is incorrect", 401));
+
+    room = await Room.findByIdAndUpdate(_id, {$push : {verified: userID}}, {new: true});
+
+    res.status(200).json({
+        status: "success",
+        room,
+    });
+});
 
 exports.deleteRoom = catchAsync(async(req, res, next) => {
     const id = req.params.id;
@@ -73,4 +99,4 @@ exports.deleteRoom = catchAsync(async(req, res, next) => {
     res.status(200).json({
         status: "success",
     });
-})
+});
