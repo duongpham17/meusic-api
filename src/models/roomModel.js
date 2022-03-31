@@ -14,6 +14,20 @@ const roomSchema = new mongoose.Schema({
             ref: 'User',
         }
     ],
+    online: [
+        {
+            _id:{
+                type: mongoose.Schema.ObjectId,
+                ref: 'User',
+            },
+            username: {
+                type: String
+            },
+            socketId: {
+                type: String
+            }
+        }
+    ],
     private: {
         type: Boolean,
         default: false

@@ -100,3 +100,11 @@ exports.deleteRoom = catchAsync(async(req, res, next) => {
         status: "success",
     });
 });
+
+exports.inCurrentRoom = catchAsync(async(req, res, next) => {
+    const userID = req.user.id;
+    
+    const room = await Room.findById({online: {_id: userID}});
+
+    console.log(room);
+})
