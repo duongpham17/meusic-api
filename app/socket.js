@@ -8,6 +8,10 @@ module.exports = (io) => {
 
         socketController.leave(socket, io);
 
+        socketController.updateSong(socket, io);
+
+        socketController.changeSong(socket, io);
+
         socketController.disconnecting(socket, io);
 
         socketController.disconnect(socket, io);

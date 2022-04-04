@@ -36,6 +36,10 @@ const roomSchema = new mongoose.Schema({
         type: String,
         select: false
     },
+    index: {
+        type: Number,
+        default: 0
+    },
     songs:[
         {
             title:{
