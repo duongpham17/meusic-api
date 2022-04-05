@@ -78,6 +78,10 @@ exports.updateSong = (socket, io) => {
             roomData.songs = [...roomData.songs, ...song];
 
             roomData = await roomData.save({new: true});
+        };
+
+        if(type === "clear") {
+            roomData = await Room.findOneAndUpdate({room}, {songs: []}, {new: true});
         }
 
         io.to(room).emit('updatedSong', roomData)
@@ -91,5 +95,5 @@ exports.changeSong = (socket, io) => {
         const roomData = await Room.findOneAndUpdate({room}, {index}, {new: true});
 
         io.to(room).emit('changedSong', roomData)
-    })
+    });
 }
