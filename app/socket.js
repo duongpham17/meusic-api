@@ -1,7 +1,9 @@
+const cors = require('./cors');
 const socketController = require('../src/socket');
 
+module.exports = (http) => {
 
-module.exports = (io) => {
+    const io = require('socket.io')(http, {cors: {origin: cors.whitelist} });
 
     io.on('connection', socket => {
         socketController.join(socket, io);
@@ -11,6 +13,8 @@ module.exports = (io) => {
         socketController.updateSong(socket, io);
 
         socketController.changeSong(socket, io);
+
+        socketController.test(socket, io);
 
         socketController.disconnecting(socket, io);
 

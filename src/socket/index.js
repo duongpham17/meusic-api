@@ -97,3 +97,11 @@ exports.changeSong = (socket, io) => {
         io.to(room).emit('changedSong', roomData)
     });
 }
+
+exports.test = (socket, io) => {
+    socket.on("test", (data) => {
+        console.log(data)
+
+        io.emit("tested", {user: "hello"})
+    })
+}

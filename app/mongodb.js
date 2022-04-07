@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
-module.exports  = async () => {
+module.exports  = () => {
     
     try{
         const db = process.env.DATABASE.replace('<password>', process.env.DATABASE_PASSWORD);
     
         const use = {useUnifiedTopology: true, useNewUrlParser: true};
 
-        await mongoose.connect( db , use );
+        mongoose.connect( db , use );
 
-        const enviroment = process.env.NODE_ENV === "development";
+        const development = process.env.NODE_ENV === "development";
 
-        if (enviroment) console.log("DB connection successful!");
+        if (development) console.log("DB connection successful!");
 
     } catch (err){
 
