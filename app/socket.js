@@ -14,8 +14,6 @@ module.exports = (http) => {
 
         socketController.changeSong(socket, io);
 
-        socketController.test(socket, io);
-
         socketController.disconnecting(socket, io);
 
         socketController.disconnect(socket, io);
