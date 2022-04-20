@@ -2,7 +2,7 @@ const cors = require('cors');
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
-const whitelist = isDevelopment ? ['http://localhost:3000'] : ["https://meusic-web-app.herokuapp.com"];
+const whitelist = isDevelopment ? ['http://localhost:3000'] : ["https://meusic.herokuapp.com"];
 
 // Only selected domain will have access to full the methods
 const corsPrivate = () => {
