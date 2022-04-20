@@ -11,7 +11,7 @@ export const RequestComponent = ({endpoint, title, description, setAlert}) => {
 
     const [open, setOpen] = useState(false);
 
-    const url = "https://meusic-api-app.herokuapp.com/api/public";
+    const url = process.env.REACT_APP_PRODUCTION_PORT_API;
 
     const onCopy = (value) => () => {
         navigator.clipboard.writeText(`${url}${value}`);
