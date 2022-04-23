@@ -2,7 +2,7 @@ const {appError, catchAsync} = require('../utils/catchError');
 const Song = require('../models/songModel');
 const SavedPlaylist = require('../models/savedPlaylistModel');
 
-exports.getSavedPlaylist = catchAsync(async(req, res, next) => {
+exports.getAll = catchAsync(async(req, res, next) => {
     const userId = req.user.id;
     const sort = req.query.sort;
 
@@ -20,7 +20,7 @@ exports.getSavedPlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.addToSavedPlaylist = catchAsync(async(req, res, next) => {
+exports.add = catchAsync(async(req, res, next) => {
     const songId = req.params.id;
 
     const userId = req.user.id;
@@ -47,7 +47,7 @@ exports.addToSavedPlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.removeFromSavedPlaylist = catchAsync(async(req, res, next) => {
+exports.delete = catchAsync(async(req, res, next) => {
     const songId = req.params.id;
     const userId = req.user.id;
 

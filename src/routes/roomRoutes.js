@@ -5,12 +5,11 @@ const room = require('../controllers/roomController');
 router.use(auth.protect);
 
 router.get('/', room.getMyRooms);
-router.post('/', room.createRoom);
-router.get('/search/:name', room.searchRooms);
+router.post('/', room.create);
 router.get('/:name', room.getRoom);
-router.patch('/private', room.privateRoom);
-router.post('/password', room.checkPasswordOfRoom);
-router.delete('/:id', room.deleteRoom);
-
+router.get('/search/:name', room.search);
+router.patch('/private', room.private);
+router.post('/password', room.checkPassword);
+router.delete('/:id', room.delete);
 
 module.exports = router;

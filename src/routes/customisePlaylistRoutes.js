@@ -4,12 +4,13 @@ const customisePlaylist = require('../controllers/customisePlaylistController');
 
 router.use(auth.protect);
 
-router.get('/', customisePlaylist.getCustomisePlaylist);
-router.post('/', customisePlaylist.createCustomisePlaylist);
-router.patch('/', customisePlaylist.updateCustomisePlaylist);
-router.post('/duplicate', customisePlaylist.duplicateCustomisePlaylist);
-router.delete('/:id', customisePlaylist.deleteCustomisePlaylist);
-router.post('/others', customisePlaylist.saveOthersPlaylistToCustomisePlaylist);
-router.patch('/reorder', customisePlaylist.reorderCustomisePlaylist);
+router.get('/', customisePlaylist.getAll);
+router.post('/', customisePlaylist.create);
+router.patch('/', customisePlaylist.update);
+router.post('/duplicate', customisePlaylist.duplicate);
+router.delete('/:id', customisePlaylist.delete);
+router.patch('/reorder', customisePlaylist.reorder);
+router.post('/save', customisePlaylist.savePlaylist);
+router.get('/randomise', customisePlaylist.generateRandomPlaylist)
 
 module.exports = router;

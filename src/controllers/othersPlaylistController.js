@@ -2,7 +2,7 @@ const {appError, catchAsync} = require('../utils/catchError');
 const Others = require('../models/othersPlaylistModel');
 const Customise = require('../models/customisePlaylistModel');
 
-exports.getOthersPlaylist = catchAsync(async(req, res, next) => {
+exports.getAll = catchAsync(async(req, res, next) => {
     const user = req.user.id;
 
     let others = await Others.find({user}).populate("others");
@@ -17,7 +17,7 @@ exports.getOthersPlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.searchOthersPlaylist = catchAsync(async(req, res, next) => {
+exports.search = catchAsync(async(req, res, next) => {
     const name = req.params.name;
 
     let others = await Customise.find({name: {$regex: new RegExp(name, "i") }}).limit(40);
@@ -35,7 +35,7 @@ exports.searchOthersPlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.saveOthersPlaylist = catchAsync(async(req, res, next) => {
+exports.save = catchAsync(async(req, res, next) => {
     const others = req.params.id;
     const user = req.user.id;
 
@@ -53,7 +53,7 @@ exports.saveOthersPlaylist = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.deleteOthersPlaylist = catchAsync(async(req, res, next) => {
+exports.delete = catchAsync(async(req, res, next) => {
     const others = req.params.id;
 
     await Others.findOneAndDelete({others});

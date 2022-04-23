@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const auth = require('../controllers/authController');
-const others = require('../controllers/othersPlaylistController');
+const othersPlaylist = require('../controllers/othersPlaylistController');
 
 router.use(auth.protect);
 
-router.get('/', others.getOthersPlaylist);
-router.post('/:id', others.saveOthersPlaylist);
-router.get('/:name', others.searchOthersPlaylist);
-router.delete('/:id', others.deleteOthersPlaylist);
+router.get('/', othersPlaylist.getAll);
+router.post('/:id', othersPlaylist.save);
+router.get('/:name', othersPlaylist.search);
+router.delete('/:id', othersPlaylist.delete);
 
 module.exports = router;

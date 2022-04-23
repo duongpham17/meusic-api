@@ -1,16 +1,6 @@
 const {appError, catchAsync} = require('../utils/catchError');
 const Room = require('../models/roomModel');
 
-exports.getRoom = catchAsync(async(req, res, next) => {
-    const name = req.params.name;
-
-    const room = await Room.findOne({room: name});
-
-    res.status(200).json({
-        status: "success",
-        room
-    });
-});
 
 exports.getMyRooms = catchAsync(async(req, res, next) => {
     const userID = req.user.id;
@@ -21,9 +11,9 @@ exports.getMyRooms = catchAsync(async(req, res, next) => {
         status: "success",
         room
     });
-})
+});
 
-exports.searchRooms = catchAsync(async(req, res, next) => {
+exports.search = catchAsync(async(req, res, next) => {
     const name = req.params.name;
 
     const query = {
@@ -38,7 +28,7 @@ exports.searchRooms = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.createRoom = catchAsync(async(req, res, next) => {
+exports.create = catchAsync(async(req, res, next) => {
     const {name} = req.body;
     const admin = req.user.id;
 
@@ -54,7 +44,7 @@ exports.createRoom = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.privateRoom = catchAsync(async(req, res, next) => {
+exports.private = catchAsync(async(req, res, next) => {
     const {password, _id, private} = req.body;
     
     let room;
@@ -73,7 +63,7 @@ exports.privateRoom = catchAsync(async(req, res, next) => {
     });
 });  
 
-exports.checkPasswordOfRoom = catchAsync(async(req, res, next) => {
+exports.checkPassword = catchAsync(async(req, res, next) => {
     const {password, _id} = req.body;
     const userID = req.user.id;
 
@@ -91,7 +81,19 @@ exports.checkPasswordOfRoom = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.deleteRoom = catchAsync(async(req, res, next) => {
+
+exports.getRoom = catchAsync(async(req, res, next) => {
+    const name = req.params.name;
+
+    const room = await Room.findOne({room: name});
+
+    res.status(200).json({
+        status: "success",
+        room
+    });
+});
+
+exports.delete = catchAsync(async(req, res, next) => {
     const id = req.params.id;
 
     await Room.findByIdAndDelete(id);
@@ -100,11 +102,3 @@ exports.deleteRoom = catchAsync(async(req, res, next) => {
         status: "success",
     });
 });
-
-exports.inCurrentRoom = catchAsync(async(req, res, next) => {
-    const userID = req.user.id;
-    
-    const room = await Room.findById({online: {_id: userID}});
-
-    console.log(room);
-})

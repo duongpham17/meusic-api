@@ -6,7 +6,7 @@ const ytdl = require('ytdl-core');
 const { NFTStorage, Blob } = require('nft.storage');
 const fetch = require('node-fetch');
 
-exports.uploadSong = catchAsync(async (req, res, next) => {
+exports.upload = catchAsync(async (req, res, next) => {
     const {url, song: customSong, artist: customArtist} = req.body;
 
     const getSongInfoFromYtdl = async (url) => {
@@ -99,7 +99,7 @@ exports.getTotalSongs = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.incrementSongPlayed = catchAsync(async(req, res, next) => {
+exports.playedCounter = catchAsync(async(req, res, next) => {
 
     const id = req.params.id;
 

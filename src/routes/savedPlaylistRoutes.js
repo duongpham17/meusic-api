@@ -4,8 +4,8 @@ const savedPlaylist = require('../controllers/savedPlaylistController');
 
 router.use(auth.protect)
 
-router.get('/', savedPlaylist.getSavedPlaylist);
-router.post('/:id', savedPlaylist.addToSavedPlaylist);
-router.delete('/:id', savedPlaylist.removeFromSavedPlaylist);
+router.get('/', savedPlaylist.getAll);
+router.post('/:id', savedPlaylist.add);
+router.delete('/:id', savedPlaylist.delete);
 
 module.exports = router;
