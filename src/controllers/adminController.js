@@ -42,6 +42,17 @@ exports.deleteSong = catchAsync(async(req, res) => {
     });
 });
 
+exports.updateSong = catchAsync(async(req, res) => {
+    const data = req.body;
+
+    const song = await Song.findByIdAndUpdate(data._id, data, {new: true});
+
+    res.status(200).json({
+        status: "success",
+        song
+    });
+});
+
 exports.deleteAllFromStorage = catchAsync(async(req, res) => {
     const songsWithCid = await Song.find({cidRemoved : false});
 
