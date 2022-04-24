@@ -40,17 +40,32 @@ const songSchema = new mongoose.Schema({
 });
 
 songSchema.pre("save", function (next){
-    const wordConfig = (word) => {
-        return String(word)
-        .toLowerCase()
-        .split(" ")
-        .map(el => el.slice(0, 1).toUpperCase() + el.slice(1) )
-        .join(" ")
+    const stringFilter = (string) => {   
+        const regexStringWithOffical =  /(official video|official audio|official animated video|official audio|official lyric video|official music video|clip official|official video edit)/g;
+        const regexOtherStrings = /(lyrics|lyric|lyric video|video|audio)/g;
+        const regexEmoji = /\p{Emoji}/gu;
+        const regexParentheses = "()";
+        const regexArray = "[]"
+        const regexBrackets = "{}";
+
+        const newString = string
+            .toLowerCase()
+            .replace(regexStringWithOffical, "")
+            .replace(regexOtherStrings, "")
+            .replace(regexEmoji, "")
+            .replace(regexParentheses, "")
+            .replace(regexArray, "")
+            .replace(regexBrackets, "")
+            .split(" ")
+            .map(el => el.slice(0, 1).toUpperCase() + el.slice(1) )
+            .join(" ");
+
+        return newString
     }
     
-    this.title = wordConfig(this.title)
-    this.artist = wordConfig(this.artist);
-    this.song = wordConfig(this.song);
+    this.title = stringFilter(this.title)
+    this.artist = stringFilter(this.artist);
+    this.song = stringFilter(this.song);
 
     next();
 });
