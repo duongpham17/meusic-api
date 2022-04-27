@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    address: {
+        type: String,
+    },
     code: {
         type: String,
         select: false,

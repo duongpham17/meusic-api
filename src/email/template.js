@@ -22,7 +22,7 @@ exports.authTemplate = (des, url, code) => `
             </tr>
             <tr class="link">
                 <td style="text-align: center">
-                    <a class="link" href="${websiteLink}${url}" style="text-decoration: none; color: black; box-shadow:0 1px 10px -3px lightgrey; padding: 1rem 3rem; border-radius: 10px; display:block; width: 100px; margin: 1rem auto"> 
+                    <a class="link" href="${websiteLink}/#${url}" style="text-decoration: none; color: black; box-shadow:0 1px 10px -3px lightgrey; padding: 1rem 3rem; border-radius: 10px; display:block; width: 100px; margin: 1rem auto"> 
                         <b style="font-size: 1.2rem">${des}</b>
                     </a>
                 <p style="margin-top: 4rem; display:block">

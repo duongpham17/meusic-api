@@ -4,15 +4,20 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const {emailSignup, emailLogin} = require('../email');
 
-const createSecureToken = (user) => {
+/**
+ * @param { Object } user - user information
+ * @param { string } type - enum "email" | "crypto"
+*/
+const createSecureToken = (user, type="email") => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRES}d` });
 
     const expireInNumber = Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000);
 
     const cookie = {
         token: `Bearer ${token}`,
-        expires: expireInNumber
-    }
+        expires: expireInNumber,
+        type,
+    };
 
     return cookie;
 };
@@ -191,7 +196,7 @@ exports.confirmCode = catchAsync(async (req, res, next) => {
 
     await user.save();
 
-    const cookie = createSecureToken(user);
+    const cookie = createSecureToken(user);l
 
     res.status(200).json({
         status: "success",
