@@ -8,7 +8,7 @@ const {emailSignup, emailLogin} = require('../email');
  * @param { Object } user - user information
  * @param { string } type - enum "email" | "crypto"
 */
-const createSecureToken = (user, type="email") => {
+const createSecureToken = (user) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRES}d` });
 
     const expireInNumber = Date.now() + (process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000);
@@ -16,7 +16,6 @@ const createSecureToken = (user, type="email") => {
     const cookie = {
         token: `Bearer ${token}`,
         expires: expireInNumber,
-        type,
     };
 
     return cookie;
@@ -196,11 +195,49 @@ exports.confirmCode = catchAsync(async (req, res, next) => {
 
     await user.save();
 
-    const cookie = createSecureToken(user);l
+    const cookie = createSecureToken(user);
 
     res.status(200).json({
         status: "success",
         user,
         cookie
     });
+});
+
+exports.cryptoAuthentication = catchAsync(async(req, res, next) => {
+    const {hexAddress} = req.body;
+
+    let user = await User.findOne({cryptoAddress: hexAddress});
+
+    if(!user) {
+
+        const generateRandomName = (string) => {
+            const randomNumber = (string) => Math.floor(Math.random() * Number(string.length));
+    
+            let name = [];
+    
+            const splitString = string.split("");
+            
+            for(let i = 0; i < 12; i++) name.push(splitString[randomNumber(hexAddress)]);
+    
+            return name.join("");
+        };
+
+        const randomName = generateRandomName(hexAddress);
+    
+        const username = `${randomName.substring(0, 5)} ${randomName.substring(5)}`;
+
+        const email = `${randomName}@unknown.io`;
+
+        user = await User.create({cryptoAddress: hexAddress, username, email});
+    };
+
+    const cookie = createSecureToken(user);
+
+    res.status(200).json({
+        status: "success",
+        user,
+        cookie
+    });
+
 });

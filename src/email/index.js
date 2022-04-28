@@ -1,7 +1,7 @@
 require('dotenv').config({ path: "./config.env" });
 
 const nodemailer = require('nodemailer');
-const {authTemplate} = require('./template');
+const {authTemplate, requestEmailChangeTemplate} = require('./template');
 
 const EmailAddress = process.env.EMAIL;
 
@@ -43,6 +43,23 @@ exports.emailLogin = async (data) => {
             ${authTemplate(
                 "Login now",
                 data.url, 
+                data.code
+            )}
+        `
+    }
+
+    await transporter.sendMail(mailOptions);
+}
+
+exports.requestEmailChange = async (data) => {
+    const transporter = Email();
+
+    const mailOptions = {
+        from: `${EmailAddress} <${EmailAddress}>`,
+        to: data.email,
+        subject: "Requested Email Change",
+        html: `
+            ${requestEmailChangeTemplate(
                 data.code
             )}
         `
