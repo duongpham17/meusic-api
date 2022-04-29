@@ -52,7 +52,7 @@ exports.restrictTo = (...roles) => {
 
 exports.loggedIn = catchAsync(async (req, res, next) => {
 
-    const select = ["email", "username", "role", "createdAt"]
+    const select = ["email", "username", "role", "createdAt", "cryptoAddress"]
 
     const user = await User.findById(req.user.id).select(select);
 

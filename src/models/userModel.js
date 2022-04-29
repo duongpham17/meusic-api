@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         default: Date.now()
     },
     cryptoAddress: {
-        type: String,
+        type: String
     },
     code: {
         type: String,

@@ -3,7 +3,6 @@ const User = require("../models/userModel");
 const { requestEmailChange } = require("../email");
 
 exports.updateUsername = catchAsync(async(req, res, next) => {
-
     const {username} = req.body;
 
     const usernameExist = await User.findOne({username});
@@ -19,7 +18,7 @@ exports.updateUsername = catchAsync(async(req, res, next) => {
 });
 
 exports.requestEmailChange = catchAsync(async(req, res, next) => {
-    const userID = req.user;
+    const userID = req.user._id;
     const {email} = req.body;
 
     let user = await User.findOne({email});
@@ -42,10 +41,9 @@ exports.requestEmailChange = catchAsync(async(req, res, next) => {
 
 });
 
-
 exports.updateEmailConfirm = catchAsync(async (req, res, next) => {
     const {code, email} = req.body;
-    const userID = req.user;
+    const userID = req.user._id;
 
     let user = await User.findById(userID).select('+code');
 
@@ -56,6 +54,22 @@ exports.updateEmailConfirm = catchAsync(async (req, res, next) => {
     user.code = undefined;
 
     user = await User.findByIdAndUpdate(userID, {email}, {new: true});
+
+    res.status(200).json({
+        status: "success",
+        user
+    });
+});
+
+exports.updateCryptoAddress = catchAsync(async(req, res, next) => {
+    const userID = req.user._id;
+    const {hexAddress} = req.body;
+
+    const cryptoAddressExist = await User.findOne({cryptoAddress: hexAddress});
+
+    if(cryptoAddressExist) return next(new appError("Crypto wallet already linked to another account", 401));
+
+    const user = await User.findByIdAndUpdate(userID, {cryptoAddress: hexAddress}, {new: true});
 
     res.status(200).json({
         status: "success",
