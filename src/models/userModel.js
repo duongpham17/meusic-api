@@ -24,9 +24,9 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    cryptoAddress: {
-        type: String
-    },
+    cryptoAddress: [
+        String
+    ],
     code: {
         type: String,
         select: false,

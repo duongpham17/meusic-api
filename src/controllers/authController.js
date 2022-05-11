@@ -123,7 +123,7 @@ exports.signupUsername = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.login = catchAsync(async(req, res, next) => {
+exports.loginEmail = catchAsync(async(req, res, next) => {
     const {email} = req.body;
 
     let user = await User.findOne({email});
@@ -207,7 +207,7 @@ exports.confirmCode = catchAsync(async (req, res, next) => {
 exports.cryptoAuthentication = catchAsync(async(req, res, next) => {
     const {hexAddress} = req.body;
 
-    let user = await User.findOne({cryptoAddress: hexAddress});
+    let user = await User.findOne({cryptoAddress: {$in: [hexAddress]}});
 
     if(!user) {
 
@@ -229,7 +229,7 @@ exports.cryptoAuthentication = catchAsync(async(req, res, next) => {
 
         const email = `${randomName}@unknown.io`;
 
-        user = await User.create({cryptoAddress: hexAddress, username, email});
+        user = await User.create({cryptoAddress: [hexAddress], username, email});
     };
 
     const cookie = createSecureToken(user);

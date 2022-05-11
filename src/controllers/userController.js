@@ -65,11 +65,29 @@ exports.updateCryptoAddress = catchAsync(async(req, res, next) => {
     const userID = req.user._id;
     const {hexAddress} = req.body;
 
-    const cryptoAddressExist = await User.findOne({cryptoAddress: hexAddress});
+    let user = await User.findById(userID);
 
-    if(cryptoAddressExist) return next(new appError("Crypto wallet already linked to another account", 401));
+    const alreadyLinked = user.cryptoAddress.includes(hexAddress);
 
-    const user = await User.findByIdAndUpdate(userID, {cryptoAddress: hexAddress}, {new: true});
+    if(alreadyLinked) return next(new appError("Already linked", 401));
+
+    const linkedToOtherAccount = await User.findOne({cryptoAddress: {$in: [hexAddress]}});
+
+    if(linkedToOtherAccount) return next(new appError("Already linked to another account", 401));
+
+    user = await User.findByIdAndUpdate(userID, {$push: {cryptoAddress: hexAddress}}, {new: true});
+
+    res.status(200).json({
+        status: "success",
+        user
+    });
+});
+
+exports.removeCryptoAddress = catchAsync(async(req, res, next) => {
+    const userID = req.user._id;
+    const hexAddress = req.params.address;
+
+    const user = await User.findByIdAndUpdate(userID, {$pull: {cryptoAddress: hexAddress}}, {new: true});
 
     res.status(200).json({
         status: "success",

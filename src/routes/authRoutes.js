@@ -3,11 +3,11 @@ const auth = require('../controllers/authController');
 
 router.get('/persist', auth.protect, auth.loggedIn);
 
-router.post('/login/email', auth.login);
+router.post('/login/email', auth.loginEmail);
+router.post('/login/crypto', auth.cryptoAuthentication);
 router.post('/signup/email', auth.signupEmail);
 router.post('/signup/username', auth.signupUsername);
 router.post('/confirm/:code', auth.confirmEmail);
 router.post('/confirm', auth.confirmCode);
-router.post('/crypto', auth.cryptoAuthentication);
 
 module.exports = router;
