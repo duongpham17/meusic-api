@@ -11,7 +11,7 @@ exports.upload = catchAsync(async (req, res, next) => {
 
     const getSongInfoFromYtdl = async (url) => {
         const info = await ytdl.getInfo(url);
-        const format = info.formats.filter(i => i.mimeType.includes("audio/mp4"));
+        const format = info.formats.filter(i => i.mimeType.includes("audio/webm"));
         return {
             url : format[0].url,
             title: info.videoDetails.title,
