@@ -11,9 +11,10 @@ exports.upload = catchAsync(async (req, res, next) => {
 
     const getSongInfoFromYtdl = async (url) => {
         const info = await ytdl.getInfo(url);
-        const format = info.formats.filter(i => i.mimeType.includes("audio/mp4"));
+        const format = ytdl.filterFormats(info.formats, 'audioonly');
+        const audio = format.filter(el => el.mimeType.includes("audio/mp4"));
         return {
-            url : format[0].url,
+            url : audio[0].url,
             title: info.videoDetails.title,
             song: info.videoDetails.media.song,
             artist: info.videoDetails.media.artist,
@@ -30,18 +31,6 @@ exports.upload = catchAsync(async (req, res, next) => {
     };
 
     if(!songInfo.song || !songInfo.artist) return next(new appError("undefined", 401));
-
-    const isDownloaded = async (song, title) => {
-        const music = await Song.find().select(["title", "song"]);
-        const songDownloaded = music.some(el => el.song.toLowerCase() === song.toLowerCase() );
-        const titleDownloaded = music.some(el => el.title.toLowerCase()  === title.toLowerCase());
-        const alreadyDownloaded = songDownloaded && titleDownloaded ? true : false;
-        return alreadyDownloaded;
-    };
-
-    const downloaded = await isDownloaded(songInfo.song, songInfo.title);
-
-    if(downloaded) return next(new appError("duplicate", 401));
 
     const downloadSongAsBufferFromUrl = async (url) => {
         const downloadUrl = await fetch(url);
@@ -61,13 +50,10 @@ exports.upload = catchAsync(async (req, res, next) => {
     
     const cid = await uploadToStorage(bufferedAudio);
 
-    const data = {
-        ...songInfo,
-        cid,
-        url: `https://${cid}.ipfs.dweb.link`,
-    }
+    const data = {...songInfo, cid, url: `https://${cid}.ipfs.dweb.link`}
 
     const song = await Song.create(data);
+
     await Saved.create({song: song._id, user: req.user.id, artist: data.artist});
 
     res.status(201).json({
