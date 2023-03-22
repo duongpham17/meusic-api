@@ -1,8 +1,10 @@
 const cors = require('cors');
 
+const {production_frontend_url, development_frontend_url} = require('../environment')
+
 const isDevelopment = process.env.NODE_ENV === "development";
 
-const whitelist = isDevelopment ? ['http://localhost:3000'] : [process.env.WEBSITE_URL];
+const whitelist = isDevelopment ? [development_frontend_url] : [production_frontend_url];
 
 // Only selected domain will have access to full the methods
 const corsPrivate = () => {

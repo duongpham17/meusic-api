@@ -14,8 +14,8 @@ require('./routes')(app);
 
 require('./socket')(http);
 
-require('./mongodb')();
+require('./frontend')(app, express);
 
-require('./heroku')(app, express);
+require('./mongodb')();
 
 require('./port')(http);

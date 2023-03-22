@@ -1,7 +1,6 @@
 require('dotenv').config({ path: "./config.env" });
-
-const websiteLink = process.env.NODE_ENV === "development" ? process.env.FRONTEND_PORT : process.env.WEBSITE_URL;
-const name = process.env.NAME;
+const {development_frontend_url, production_frontend_url, website_name} = require('../../environment')
+const websiteLink = process.env.NODE_ENV === "development" ? development_frontend_url : production_frontend_url;
 
 exports.authTemplate = (des, url, code) => `
 <html>
@@ -11,7 +10,7 @@ exports.authTemplate = (des, url, code) => `
             <tr>
                 <th style="text-align: center;padding: 0.5rem;font-size: 1.4rem">            
                     <h2>
-                        <a href="${websiteLink}" style="text-decoration: none;color: black">${name.toUpperCase()}</a>
+                        <a href="${websiteLink}" style="text-decoration: none;color: black">${website_name.toUpperCase()}</a>
                     </h2>
                 </th>
             </tr>
@@ -59,7 +58,7 @@ exports.requestEmailChangeTemplate = (code) => `
             <tr>
                 <th style="text-align: center;padding: 0.5rem;font-size: 1.4rem">            
                     <h2>
-                        <a href="${websiteLink}" style="text-decoration: none;color: black">${name.toUpperCase()}</a>
+                        <a href="${websiteLink}" style="text-decoration: none;color: black">${website_name.toUpperCase()}</a>
                     </h2>
                 </th>
             </tr>
