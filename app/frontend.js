@@ -3,10 +3,14 @@ const path = require('path');
 module.exports = (app, express) => {
     const production = process.env.NODE_ENV === "production";
 
-    if(!production) return;
+    if (!production) return;
 
-    app.use(express.static(path.join(__dirname, '../../frontend/build')));
+    const buildPath = path.join(__dirname, '../../frontend/build');
 
-    app.get('*', (req, res) => res.sendFile('index.html', {root: path.join(__dirname, '../../frontend', 'build')}));
+    app.use(express.static(buildPath));
 
+    app.get('*', (req, res) => {
+        const indexPath = path.join(buildPath, 'index.html');
+        res.sendFile(indexPath);
+    });
 }
